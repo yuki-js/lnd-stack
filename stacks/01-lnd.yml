@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  lnd:
+    image: ghcr.io/yuki-js/lnd-stack/lnd:latest
+    volumes:
+      - /ouchistack-data/ssd/lnd-data:/data
+      - /ouchistack-data/ssd/lnd-data/rpc:/rpc
+    networks:
+      - ext-lnd
+      - over-stack
+    environment:
+      NETWORK: mainnet
+      RPCPASS: rpcpass
+    ports:
+      - 9735:9735
+    deploy:
+      placement:
+        max_replicas_per_node: 1
+
+networks:
+  ext-lnd:
+    internal: false
+  over-stack:
+    external: true
+    name: over-stack
