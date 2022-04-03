@@ -10,35 +10,51 @@ services:
       - POSTGRES_PASSWORD=lnd
       - POSTGRES_DB=lnd
       - POSTGRES_INITDB_ARGS=--locale=en_US.utf8
+    networks:
+      int-db:
+  tor:
+    image: ghcr.io/yuki-js/lnd-stack/tor:latest
+    configs:
+      - source: tor
+        target: /etc/tor/torrc
+        mode: 0444
+    networks:
+      int-tor-proxy:
+      ext-tor:
   lnd:
     image: ghcr.io/yuki-js/lnd-stack/lnd:latest
     volumes:
       - /ouchistack-data/ssd/lnd-data:/data
       - /ouchistack-data/ssd/lnd-data/rpc:/rpc
     networks:
+      int-db:
       ext-lnd:
-        aliases:
-          - lnd2
-      over-stack:
-        aliases:
-          - lnd2
+      int-tor-proxy:
     environment:
       NETWORK: mainnet
     configs:
       - source: lnd
         target: /lnd.conf
         mode: 0444
+    depends_on:
+      - postgres
+      - tor
     deploy:
       placement:
         max_replicas_per_node: 1
 
 networks:
+  int-tor-proxy:
+    internal: true
+  ext-tor:
+    external: true
+  int-db:
+    internal: true
   ext-lnd:
     internal: false
-  over-stack:
-    external: true
-    name: over-stack
 
 configs:
   lnd:
     file: ../configs/lnd.conf
+  tor:
+    file: ../configs/torrc
