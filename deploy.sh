@@ -11,4 +11,4 @@ for STACK in $STACKS; do
   ARGS="${ARGS} -c ${STACK}"
 done
 
-docker stack deploy ${ARGS} ouchistack
+docker stack deploy ${ARGS} lnd-stack

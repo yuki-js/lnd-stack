@@ -37,9 +37,7 @@ RUN adduser -S user
 RUN mkdir /data && chmod 777 /data
 RUN mkdir /rpc && chmod 777 /rpc
 RUN mkdir /.lnd && chmod 777 /.lnd
-COPY "./lnd.conf" /lnd.conf
 COPY "./run-lnd.sh" /run-lnd.sh
-RUN chmod 444 /lnd.conf
 RUN chmod 555 /run-lnd.sh
 
 

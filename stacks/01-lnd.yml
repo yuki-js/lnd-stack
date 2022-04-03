@@ -12,8 +12,6 @@ services:
     environment:
       NETWORK: mainnet
       RPCPASS: rpcpass
-    ports:
-      - 9735:9735
     deploy:
       placement:
         max_replicas_per_node: 1
