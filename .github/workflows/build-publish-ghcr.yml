@@ -11,6 +11,7 @@ jobs:
       matrix:
         name:
           - lnd
+          - tor
     permissions:
       packages: write
       contents: read
