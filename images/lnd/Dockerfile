@@ -6,7 +6,7 @@ LABEL from="https://github.com/lightningnetwork/lnd/blob/master/dev.Dockerfile"
 # queries required to connect to linked containers succeed.
 ENV GODEBUG netdns=cgo
 
-ARG checkout="v0.14.1"
+ARG checkout="v0.14.2-beta"
 
 # Install dependencies and install/build lnd.
 RUN apk add --no-cache --update alpine-sdk \
