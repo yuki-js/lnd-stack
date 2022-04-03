@@ -12,6 +12,10 @@ services:
     environment:
       NETWORK: mainnet
       RPCPASS: rpcpass
+    configs:
+      - source: lnd
+        target: /lnd.conf
+        mode: 0444
     deploy:
       placement:
         max_replicas_per_node: 1
@@ -22,3 +26,7 @@ networks:
   over-stack:
     external: true
     name: over-stack
+
+configs:
+  lnd:
+    file: ../configs/lnd.conf

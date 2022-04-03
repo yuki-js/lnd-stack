@@ -18,7 +18,7 @@ RUN git clone https://github.com/lightningnetwork/lnd.git /go/src/github.com/lig
 RUN cd /go/src/github.com/lightningnetwork/lnd \
     &&  git checkout $checkout \
     &&  make \
-    &&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd"
+    &&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd kvdb_postgres"
 
 # Start a new, final image to reduce size.
 FROM alpine:3.12 as final
