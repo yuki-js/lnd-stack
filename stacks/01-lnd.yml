@@ -1,17 +1,29 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:14-alpine
+    volumes:
+      - /ouchistack-data/ssd/lnd-data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=lnd
+      - POSTGRES_PASSWORD=lnd
+      - POSTGRES_DB=lnd
+      - POSTGRES_INITDB_ARGS=--locale=en_US.utf8
   lnd:
     image: ghcr.io/yuki-js/lnd-stack/lnd:latest
     volumes:
       - /ouchistack-data/ssd/lnd-data:/data
       - /ouchistack-data/ssd/lnd-data/rpc:/rpc
     networks:
-      - ext-lnd
-      - over-stack
+      ext-lnd:
+        aliases:
+          - lnd2
+      over-stack:
+        aliases:
+          - lnd2
     environment:
       NETWORK: mainnet
-      RPCPASS: rpcpass
     configs:
       - source: lnd
         target: /lnd.conf

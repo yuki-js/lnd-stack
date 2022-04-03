@@ -8,7 +8,7 @@ ARGS=""
 STACKS=stacks/*.yml
 
 for STACK in $STACKS; do
-  ARGS="${ARGS} -f ${STACK}"
+  ARGS="${ARGS} -c ${STACK}"
 done
 
-docker compose ${ARGS} ${@:-up -d}
+docker stack deploy ${ARGS} lnd-stack
