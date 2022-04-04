@@ -47,7 +47,7 @@ networks:
   int-tor-proxy:
     internal: true
   ext-tor:
-    external: true
+    internal: false
   int-db:
     internal: true
   ext-lnd:
