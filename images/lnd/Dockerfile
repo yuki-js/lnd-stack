@@ -1,4 +1,4 @@
-FROM golang:alpine3.12 as builder
+FROM golang:alpine3.15 as builder
 
 LABEL from="https://github.com/lightningnetwork/lnd/blob/master/dev.Dockerfile"
 
@@ -6,7 +6,7 @@ LABEL from="https://github.com/lightningnetwork/lnd/blob/master/dev.Dockerfile"
 # queries required to connect to linked containers succeed.
 ENV GODEBUG netdns=cgo
 
-ARG checkout="v0.14.2-beta"
+ARG checkout="v0.14.3-beta"
 
 # Install dependencies and install/build lnd.
 RUN apk add --no-cache --update alpine-sdk \
@@ -21,7 +21,7 @@ RUN cd /go/src/github.com/lightningnetwork/lnd \
     &&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd kvdb_postgres"
 
 # Start a new, final image to reduce size.
-FROM alpine:3.12 as final
+FROM alpine:3.15 as final
 
 # Expose lnd ports (server, rpc).
 EXPOSE 9735 10009 8080

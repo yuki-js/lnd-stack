@@ -12,6 +12,8 @@ services:
       - POSTGRES_INITDB_ARGS=--locale=en_US.utf8
     networks:
       int-db:
+    deploy:
+      replicas: 1
   tor:
     image: ghcr.io/yuki-js/lnd-stack/tor:latest
     configs:
@@ -21,6 +23,8 @@ services:
     networks:
       int-tor-proxy:
       ext-tor:
+    deploy:
+      replicas: 1
   lnd:
     image: ghcr.io/yuki-js/lnd-stack/lnd:latest
     volumes:
@@ -30,6 +34,8 @@ services:
       int-db:
       ext-lnd:
       int-tor-proxy:
+    ports:
+      - 52032:9735
     environment:
       NETWORK: mainnet
     configs:
@@ -40,8 +46,28 @@ services:
       - postgres
       - tor
     deploy:
+      replicas: 1
       placement:
         max_replicas_per_node: 1
+  admin:
+    image: ghcr.io/yuki-js/manchan/admin:latest
+    volumes:
+      - /ouchistack-data/ssd/lnd-data/rpc:/rpc
+    networks:
+      int-db:
+      ext-admin:
+    configs:
+      - source: admin
+        target: /app/admin/.env
+        mode: 0444
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production
+      APP_ENV: production
+    depends_on:
+      - lnd
+    user: root:root
 
 networks:
   int-tor-proxy:
@@ -52,9 +78,13 @@ networks:
     internal: true
   ext-lnd:
     internal: false
+  ext-admin:
+    internal: false
 
 configs:
   lnd:
     file: ../configs/lnd.conf
   tor:
     file: ../configs/torrc
+  admin:
+    file: ../configs/admin.env
